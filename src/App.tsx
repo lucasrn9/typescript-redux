@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { deposit, withdraw, bankrupt } from './redux/actions/account/account.actionCreators';
+import { rootState } from './redux/reducers';
+
 
 function App() {
+
+  const [amount,setAmount] = useState(0)
+
+  const dispatch = useDispatch()
+  const account = useSelector((state:rootState)=>state.account)
+
+  const handleAmountChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+  setAmount(Number(e.target.value))
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{account}</h1>
+      <input type="text" name="amount" id="amount"  placeholder="amount of money" onChange={(e)=>handleAmountChange(e)}/>
+      <button onClick={()=>dispatch(deposit(amount))}>deposit</button>
+      <button onClick={()=> dispatch(withdraw(amount))}>withdraw</button>
+      <button onClick={()=> dispatch(bankrupt())} >bankrupt</button>
     </div>
   );
 }
